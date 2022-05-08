@@ -1,0 +1,168 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <style>
+      .wrap {
+        overflow: auto;
+        position: relative;
+        width: 400px;
+        height: 500px;
+        margin: 0px;
+        background-color: #ccc;
+        float: left;
+      }
+
+      .box {
+        width: 100%;
+        height: 100px;
+      }
+
+      .box.red {background-color: pink; height: 500px;}
+      .box.blue {background-color: lightblue; height: 600px;}
+      .box.green {background-color: lightgreen;}
+
+      .space {
+        height: 100px;
+      }
+
+      .sticky {
+        position: sticky;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 0;
+        height: 50px;
+        background-color: rgba(0, 0 ,0, 0.3);
+        font-weight: 600;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="sticky">fixed area</div>
+      <div class="space"></div>
+      <div class="boxs">
+        <div class="box red">
+          height - 500px
+        </div>
+        <div class="box blue">
+          height - 600px
+        </div>
+        <div class="box green">
+          height - 100px
+        </div>
+      </div>
+      <div class="space"></div>
+      <div class="space"></div>
+      <div class="space"></div>
+      <div class="space"></div>
+      <div class="space"></div>
+      <div class="space"></div>
+    </div>
+    <button class="btn">scrollmove</button>
+    <script>
+      const container = document.querySelector('.wrap');
+      const sticky = document.querySelector('.sticky');
+      const boxs = document.querySelectorAll('.box');
+      let color = '';
+      const topH = 50;
+      const winH = container.offsetHeight;
+
+      // 
+      let observer = null;
+
+      initIntersection();
+
+      function initIntersection() {
+        destroyIntersection();
+
+        observer = new IntersectionObserver(callback, {
+          threshold: [0],
+          root: container,
+          rootMargin: "-" + topH + "px 0px -" + (winH - topH) + "px 0px",
+        })
+
+        for (box of boxs) {
+          observer.observe(box);
+        }
+
+        function callback(entries) {
+          for (entrie of entries) {
+            const {target, inter, ypos, bound, rect} = getEntrieInfo(entrie);
+            const yPos = ypos - container.getBoundingClientRect().top; // 컨테이너가 화면에 붙지 않았다면 필요
+            
+            console.log(inter, target.classList.item(1))
+
+            if (inter) {
+              var interElm = getLastSiblingsInViewElm(target, topH);
+              color = interElm.classList.item(1)
+            } else {
+              if (!target.previousElementSibling && yPos > topH) {
+                //console.log('first');
+                color = target.classList.item(1) // 첫 컬러 유지
+                // color = ''; // 첫 컬러 해제
+              } else if (!target.nextElementSibling && yPos < topH) {
+                //console.log('last');
+                //color = target.classList.item(1) // 마지막 컬러 유지
+                color = ''; // 마지막 컬러 해제
+              }
+            }
+
+            setColor(color);
+          }
+        }
+      }
+
+      function destroyIntersection() {
+        if (observer) {
+          observer.disconnect()
+          observer = null
+        }
+      }
+
+      // test
+      document.querySelector('.btn').addEventListener('click', elm => {
+        container.scrollTo({
+          top: Math.random() * container.scrollHeight,
+          //behavior: 'smooth',
+        });
+
+        // refresh
+        initIntersection();
+      })
+
+      function getLastSiblingsInViewElm(elm, top) {
+        var threshold = top || 0;
+        
+        while(elm) {
+          var {top, height} = elm.getBoundingClientRect();
+          
+          if (top + height >= threshold) {
+            break;
+          } else {
+            elm = elm.nextElementSibling;
+          }
+        } 
+        
+        return elm;
+      }
+
+      function setColor(color) {
+        sticky.style.setProperty('color', color); 
+      }
+
+      function getEntrieInfo(elm) {
+        return {
+          target : elm.target,
+          ratio : elm.intersectionRatio,
+          inter : elm.isIntersecting,
+          rect : elm.intersectionRect,
+          bound : elm.rootBounds,
+          ypos : elm.target.getBoundingClientRect().top,
+          height : elm.target.getBoundingClientRect().height
+        }
+      }
+    </script>
+  </body>
+</html>

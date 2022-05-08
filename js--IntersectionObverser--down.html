@@ -1,0 +1,139 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <style>
+      body {
+        margin: 0;
+      }
+
+      .wrap {
+        position: relative;
+        width: 100%;
+        height: 4000px;
+        background-color: gray;
+      }
+
+      .box {
+        position: relative;
+        top: 1500px;
+        width: 300px;
+        height: 500px;
+        background-color: pink;
+      }
+
+      .box:nth-child(2) {
+        height: 300px;
+        background-color: yellowgreen;
+      }
+
+      .box:nth-child(3) {
+        height: 1000px;
+        background-color: cadetblue;
+      }
+
+      .fixed {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 100px;
+        background-color: rgba(0, 0 ,0, 0.4);
+      }
+
+      .more {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 50px;
+        background-color: rgba(0, 0 ,0, 0.4);
+        justify-content: center;
+        align-items: center;
+        font-weight: 600;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="box">1</div>
+      <div class="box">2</div>
+      <div class="box">3</div>
+    </div>
+    <div class="fixed">
+      <button class="btn">scrollmove</button>
+    </div>
+    <div class="more">MORE</div>
+    <script>
+      const wrap = document.querySelector('.wrap');
+      const boxs = document.querySelectorAll('.box');
+      const topH = 100;
+      const bottomH = 50;
+      let observer;
+      initIntersection();
+
+      function initIntersection(direction) {
+        destroyIntersection();
+
+        // 
+        observer = new IntersectionObserver((entries) => {
+          entries.forEach((entrie) => {
+            const {target, inter, ypos, height} = getEntrieInfo(entrie)
+
+            if (inter) {
+              if (ypos  < window.innerHeight) actvie(target.textContent);
+            } else {
+              if (!target.previousElementSibling && ypos > window.innerHeight) {
+                console.log('first');
+                actvie('')
+              } else  if (!target.nextElementSibling && ypos < window.innerHeight) {
+                console.log('last');
+                actvie('')
+              }
+            }
+          })
+        }, 
+        {
+          threshold: [0],
+          rootMargin: `-${window.innerHeight}px 0px 0px 0px`
+        })
+
+        boxs.forEach((box) => {
+          observer.observe(box);
+        })
+      }
+
+      function destroyIntersection() {
+        if (observer) {
+          observer.disconnect()
+          observer = null
+        }
+      }
+
+      // test
+      document.querySelector('.btn').addEventListener('click', elm => {
+        window.scrollTo({
+          top: Math.random() * document.documentElement.scrollHeight,
+          // behavior: 'smooth',
+        });
+
+        initIntersection();
+      })
+
+      function actvie(id) {
+        document.querySelector('.more').textContent = 'MORE ' + id
+      }
+
+      function getEntrieInfo(elm) {
+        return {
+          target : elm.target,
+          ratio : elm.intersectionRatio,
+          inter : elm.isIntersecting,
+          rect : elm.intersectionRect,
+          bound : elm.rootBounds,
+          ypos : elm.target.getBoundingClientRect().top,
+          height : elm.target.getBoundingClientRect().height
+        }
+      }
+    </script>
+  </body>
+</html>
