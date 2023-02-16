@@ -1,0 +1,264 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css">
+    <style>
+      button {
+        background-color: gray;
+        border: none;
+        padding: 0.3rem;
+        font-size: 1.4rem;
+      }
+        
+      a:active,
+      a:visited,
+      a:link {
+        color: black;
+      }
+
+      ::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+      }
+
+      .wrap {
+        height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
+      }
+
+      .content {
+        position: relative;
+      }
+
+      .step {
+        overflow: hidden;
+      }
+          
+      .step.active button {
+        background-color: #A51B37;  
+      }
+            
+      .step.active .detail {
+        height: calc((var(--vh) * 100) - 5rem);
+      }
+        
+      .step button {
+        width: 100%;
+        height: 5rem;
+        color: white;
+        font-weight: bold;
+      }
+
+      .step .detail {
+        overflow-y: auto;
+        height: 0;
+        padding: 0 1rem;
+        transition: height 0.5s ease-out;
+      }
+
+      .step .detail p {
+        margin: 2rem 0;
+        font-size: 1.3rem;
+      }
+      .step .detail p:first-child {
+        margin-top: 0;
+      }
+      .step .detail p:last-child {
+        margin-bottom: 0;
+      }
+          
+      .step .control {    
+        position: relative;
+        margin: 1rem 0;
+        text-align: right;
+      }
+
+      .step .control a {
+        color: #A51B37;
+        font-weight: bold;
+        text-decoration: none;
+      }
+
+      .step .control a.prev { 
+        position: absolute;
+        left: 0;
+      }
+      
+      .step .control a.disabled {
+        color: lightgray;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="content">
+        <div class="step">
+          <div class="detail">
+            <h3>
+              Step 3
+            </h3>
+            <p>
+              The White House has said there is no indication three flying objects blasted out of the sky over the weekend by the US military are linked to alleged Chinese spying.
+            </p>
+            <p>
+              The objects may be "tied to commercial or research entities and therefore benign", spokesman John Kirby said.
+            </p>
+            <p>
+              US and Canadian officials have not yet located or recovered any wreckage from the three downed aircraft.
+            </p>
+            <p>
+              Beijing earlier accused the US of "a trigger-happy overreaction".
+            </p>
+            <p>
+              China has denied one of its balloons, which was destroyed by a US fighter jet earlier this month off South Carolina, was being used for espionage, saying it was merely a weather-monitoring airship that had blown off course.
+            </p>
+            <p>
+              At Tuesday's daily news conference, Mr Kirby said it will be difficult to determine the purpose or origin of the three other objects until the debris is found and analysed.
+            </p>
+            <p>
+              "We haven't seen any indication or anything that points specifically to the idea that these three objects were part of the PRC's [People's Republic of China] spying programme," the White House National Security Council told reporters, "or that they were definitively involved in external intelligence collection efforts".
+            </p>
+            <p>
+              A "leading explanation" being considered by US intelligence, he added, was that "these could be balloons that were simply tied to commercial or research entities and therefore benign".
+            </p>
+            <div class="control">
+              <a href="#" class="prev">이전</a>
+              <a href="#" class="next disabled">다음</a>
+            </div>
+          </div>
+          <button class="stepBtn" data-idx="2">STEP3</button>
+        </div>
+        <div class="step">
+          <div class="detail">
+            <h3>
+              Step 2
+            </h3>
+            <p>
+              In the most recent strike - over Lake Huron - the first Sidewinder missile fired by a US F-16 warplane missed its target, the top US general has confirmed.
+            </p>
+            <p>
+              "First shot missed. Second shot hit," said Chairman of the Joint Chiefs of Staff Mark Milley during a visit to Brussels on Tuesday.
+            </p>
+            <p>
+              "We go to great lengths to make sure that the airspace is clear and the backdrop is clear up to the max effective range of the missile. And in this case, the missiles land, or the missile landed, harmlessly in the water of Lake Huron."
+            </p>
+            <p>
+              A spokesman for China's Ministry of Foreign Affairs, meanwhile, criticised the American response.
+            </p>
+            <p>
+              "Many in the US have been asking, 'what good can such costly action possibly bring to the US and its taxpayers?'" said Wang Wenbin on Tuesday.
+            </p>
+            <div class="control">
+              <a href="#" class="prev">이전</a>
+              <a href="#" class="next">다음</a>
+            </div>
+          </div>
+          <button class="stepBtn" data-idx="1">STEP2</button>
+        </div>
+        <div class="step active">
+          <div class="detail">
+            <h3>
+              Step 1
+            </h3>
+            <p>
+              At Tuesday's daily news conference, Mr Kirby said it will be difficult to determine the purpose or origin of the three other objects until the debris is found and analysed.
+            </p>
+            <p>
+              "We haven't seen any indication or anything that points specifically to the idea that these three objects were part of the PRC's [People's Republic of China] spying programme," the White House National Security Council told reporters, "or that they were definitively involved in external intelligence collection efforts".
+            </p>
+            <p>
+              A "leading explanation" being considered by US intelligence, he added, was that "these could be balloons that were simply tied to commercial or research entities and therefore benign".
+            </p>
+            <div class="control">
+              <a href="#" class="prev disabled">이전</a>
+              <a href="#" class="next">다음</a>
+            </div>
+          </div>
+          <button class="stepBtn" data-idx="0">STEP1</button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script>
+      const vh = parseFloat(window.innerHeight * 0.01).toFixed(2);
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      document.documentElement.style.setProperty('--dh', `${vh}px`);
+
+      window.addEventListener('resize', 
+        _.debounce(() => {
+            const vh = parseFloat(window.innerHeight * 0.01).toFixed(2);
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+            change();
+        }, 400)
+      );
+
+      const step = document.querySelectorAll('.step')
+      const stepBtn = document.querySelectorAll('.stepBtn')
+      const nextA = document.querySelectorAll('a.next')
+      const prevA = document.querySelectorAll('a.prev')
+
+      let current = step.length - 1; // 0 ~
+      let direct = ''
+
+      const defaultStep = () => {
+        for (let elm of step) {
+          elm.classList.remove('active') 
+        }
+      }
+
+      const change = () => {
+        defaultStep();
+        const actStepElm = step.item(current);
+        const detail = actStepElm.querySelector('.detail');
+        
+        detail.scrollTop = 0;
+        actStepElm.classList.add('active');
+        actStepElm.scrollIntoView({block: (direct === 'next') ? 'start' : 'end', behavior: 'smooth'})
+      }
+
+      for (let elm of nextA) {
+        // next
+        elm.addEventListener('click', (e) => {
+          e.preventDefault();
+          
+          if (current - 1 >= 0) current -= 1;
+          direct = 'next'
+          
+          change();
+        })
+      }
+
+      for (let elm of prevA) {
+        // prev
+        elm.addEventListener('click', (e) => {
+          e.preventDefault();
+          
+          if (current + 1 < step.length) current += 1;
+          direct = 'prev'
+          
+          change();
+        })
+      }
+
+      for (let elm of stepBtn) {
+        elm.addEventListener('click', (e) => {
+          const btn = e.currentTarget
+          const idx = step.length - 1 - parseInt(btn.dataset.idx)
+
+          if (current !== idx) {
+            direct = (current > idx) ? "next"  : "prev"
+            current = idx;
+            change()
+          }
+        })
+      }
+
+      window.addEventListener("load", function(e) {
+        setTimeout(function () {
+          const firstStep = step.item(current);
+          firstStep.scrollIntoView()
+        }, 30)
+      })
+    </script>
+  </body>
+</html>
