@@ -62,12 +62,12 @@
           self.particles = [];	
           self.fireworks = [];	
 
-          self.fworkSpeed = 2;
+          self.fworkSpeed = 1;
           self.fworkAccel = 2;
           self.showShockwave = false;
           self.showTarget = false;
 
-          self.partCount = 100;
+          self.partCount = 50;
           self.partSpeed = 10;
           self.partSpeedVariance = 0;
           self.partWind = 0;
@@ -84,8 +84,8 @@
 
           self.mx = self.cw/2;
           self.my = self.ch/2;
-          self.currentHue = 170;
           self.currentColor = '';
+          //self.currentHue = 170;
           
           self.canvasContainer.append(self.canvas);
           self.ctx = self.canvas.getContext('2d');
@@ -221,7 +221,7 @@
           this.angle = Math.atan2(targetY - startY, targetX - startX);
           this.shockwaveAngle = Math.atan2(targetY - startY, targetX - startX)+(90*(Math.PI/180));
           this.acceleration = self.fworkAccel/100;
-          this.hue = self.currentHue;
+          //this.hue = self.currentHue;
           this.color = color;
           this.brightness = rand(50, 80);
           this.alpha = rand(50,100)/100;
@@ -384,21 +384,17 @@
         };
 
         var colors = [
-          '#FF0000',
-          '#FFFF00',
-          '#00FF00',
-          '#00FFFF',
-          '#0000FF',
-          '#FF00FF'
-        ]
+          '#A50034',
+          '#EA1917'
+        ];
 
         self.init();
         
-        var initialLaunchCount = 15;
+        var initialLaunchCount = Math.round(window.innerWidth * 0.01);
         while(initialLaunchCount--){
           setTimeout(function(){
             self.fireworks.push(new Firework(rand(150, self.cw-150), self.ch, rand(50, self.cw-50), rand(100, self.ch/2)-50, colors[rand(0, colors.length - 1)])); // xxx
-          }, initialLaunchCount * 200);
+          }, initialLaunchCount * 500);
         }
       }
 
